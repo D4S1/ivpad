@@ -11,9 +11,14 @@ df_box = utils.preprocess_values(excel_file)
 
 @app.route("/")
 def index():
-    vulcano_plot = utils.plot_vulacano(excel_file)
+    vulcano_plot, div_id = utils.plot_vulacano(excel_file)
     box_plot = utils.plot_gene(df_box, 'STUB1')
-    return render_template("main.html", vulcano_plot=vulcano_plot, box_plot=box_plot)
+    return render_template("main.html", vulcano_plot=vulcano_plot, vulcano_id=div_id, box_plot=box_plot)
+
+
+@app.route("/boxplot/<target>")
+def show_boxplot(gene):
+    return utils.plot_gene(df_box, gene)
 
 
 if __name__ == "__main__":

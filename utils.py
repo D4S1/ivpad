@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from plotly.offline import plot
+import re
 
 
 def preprocess_values(excel_file):
@@ -13,6 +14,8 @@ def preprocess_values(excel_file):
 
     return df_box[["EntrezGeneID", "EntrezGeneSymbol", "Organism"] + samples]
 
+def say_hello():
+    print('Hello')
 
 def plot_vulacano(file: str):
     df_volcano = pd.read_excel(file, sheet_name="S4B limma results", header=2, index_col=0)
@@ -29,11 +32,15 @@ def plot_vulacano(file: str):
 
     fig.update_traces(textposition='top center')
     
-    return plot(fig,
-                output_type='div',
-                include_plotlyjs=False,
-                config={'displayModeBar': False},
-                )
+    vulcano = plot(
+        fig,
+        output_type='div',
+        include_plotlyjs=True,
+        config={'displayModeBar': False},
+        )
+    plot_id = re.search('<div id="([^"]*)"', vulcano).groups()[0]
+
+    return vulcano, plot_id
 
 
 def plot_gene(data: pd.DataFrame, gene: str):
@@ -49,8 +56,9 @@ def plot_gene(data: pd.DataFrame, gene: str):
         pointpos=0
     )
 
-    return plot(fig,
-                output_type='div',
-                include_plotlyjs=False,
-                config={'displayModeBar': False},
-                )
+    return plot(
+        fig,
+        output_type='div',
+        include_plotlyjs=True,
+        config={'displayModeBar': False},
+        )

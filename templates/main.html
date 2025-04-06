@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <title>Wizualizacja aktywności białek</title>
 
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 <body>
+
     <h1>Wizualizacja różnic w aktywności białek</h1>
-    <div id="volcano"></div>
 
-    {{ vulcano_plot|safe }}
+    <div id="volcano-plot">
+        {{ vulcano_plot|safe }}
+    </div>
 
-    <div id="boxplot">
-        <h2>Boxplot dla wybranego genu</h2>
-        <div id="boxplot-div"></div>
 
+    <h2>Boxplot dla wybranego genu</h2>
+    <div id="boxplot-plot">
         {{ box_plot|safe }}
     </div>
 
+
+    <script>
+        let volcanoPlot = document.getElementById("{{vulcano_id}}");
+        volcanoPlot.on('plotly_click', function(data){
+            console.log(data.points[0]['hovertext']);
+
+            });
+    </script>
 </body>
 </html>
