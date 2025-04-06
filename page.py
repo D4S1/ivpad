@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, json, request
 import utils
 
 
@@ -16,7 +16,7 @@ def index():
     return render_template("main.html", vulcano_plot=vulcano_plot, vulcano_id=div_id, box_plot=box_plot)
 
 
-@app.route("/boxplot/<target>")
+@app.route("/boxplot/<gene>")
 def show_boxplot(gene):
     return utils.plot_gene(df_box, gene)
 

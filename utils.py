@@ -14,8 +14,6 @@ def preprocess_values(excel_file):
 
     return df_box[["EntrezGeneID", "EntrezGeneSymbol", "Organism"] + samples]
 
-def say_hello():
-    print('Hello')
 
 def plot_vulacano(file: str):
     df_volcano = pd.read_excel(file, sheet_name="S4B limma results", header=2, index_col=0)
@@ -38,9 +36,9 @@ def plot_vulacano(file: str):
         include_plotlyjs=True,
         config={'displayModeBar': False},
         )
-    plot_id = re.search('<div id="([^"]*)"', vulcano).groups()[0]
+    div_id = re.search('<div id="([^"]*)"', vulcano).groups()[0]
 
-    return vulcano, plot_id
+    return vulcano, div_id
 
 
 def plot_gene(data: pd.DataFrame, gene: str):
@@ -50,15 +48,26 @@ def plot_gene(data: pd.DataFrame, gene: str):
     data["value"] = data.iloc[:, 0].astype(float)
     data["age_group"] = data.index.map(lambda x: "Old" if "OD" in x else "Young")
 
-    fig = px.box(data, x="age_group", y="value", points="all", title=f"Boxplot for {gene} gene")
+    fig = px.box(
+                data,
+                x="age_group",
+                y="value",
+                points="all",
+                title=f"Protein Concentration: Young vs. Old for {gene}",
+                labels={
+                    "age_group": "Donor Age Group",
+                    "value": "Protein Concentration"
+                },
+                )
     fig.update_traces(
         jitter=0.3,
-        pointpos=0
+        pointpos=0,
+        hoverinfo='skip',
+        marker=dict(opacity=0.6)
     )
-
     return plot(
         fig,
         output_type='div',
-        include_plotlyjs=True,
+        include_plotlyjs=False,
         config={'displayModeBar': False},
         )

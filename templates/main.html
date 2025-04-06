@@ -5,28 +5,53 @@
     <title>Wizualizacja aktywności białek</title>
 
     <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+    <style>
+        #volcano-plot, #boxplot-plot {
+            width: 80%;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Wizualizacja różnic w aktywności białek</h1>
+    <h1>Interactive Visualization of Protein Activity Differences</h1>
 
     <div id="volcano-plot">
         {{ vulcano_plot|safe }}
     </div>
 
 
-    <h2>Boxplot dla wybranego genu</h2>
-    <div id="boxplot-plot">
-        {{ box_plot|safe }}
-    </div>
+    <div id="boxplot-plot"></div>
 
 
     <script>
         let volcanoPlot = document.getElementById("{{vulcano_id}}");
         volcanoPlot.on('plotly_click', function(data){
-            console.log(data.points[0]['hovertext']);
+            let gene = data.points[0]['hovertext'];
+            console.log(gene)
 
-            });
+            if (gene) {
+                 fetch(`/boxplot/${gene}`)
+                     .then(response => response.text())
+                     .then(html => {
+                        const container = document.getElementById('boxplot-plot');
+                        container.innerHTML = html;
+
+                        const scripts = container.querySelectorAll("script");
+                        scripts.forEach((script) => {
+                            const newScript = document.createElement("script");
+                            if (script.src) {
+                                newScript.src = script.src;
+                            } else {
+                                newScript.textContent = script.textContent;
+                            }
+                            document.body.appendChild(newScript);
+                            script.remove();
+                        })
+                    })
+             }
+         });
+
     </script>
 </body>
 </html>
