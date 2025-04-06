@@ -44,12 +44,13 @@ def plot_gene(data: pd.DataFrame, gene: str):
     data["age_group"] = data.index.map(lambda x: "Old" if "OD" in x else "Young")
 
     fig = px.box(data, x="age_group", y="value", points="all", title=f"Boxplot for {gene} gene")
-    fig.update_layout(height=400)
     fig.update_traces(
         jitter=0.3,
         pointpos=0
     )
-    fig.show()
 
-    # boxplot_div = plot(fig, output_type="div", include_plotlyjs=False)
-    # return boxplot_div
+    return plot(fig,
+                output_type='div',
+                include_plotlyjs=False,
+                config={'displayModeBar': False},
+                )

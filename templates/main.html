@@ -12,9 +12,11 @@
 
     {{ vulcano_plot|safe }}
 
-    <div id="boxplot" style="display:none;">
+    <div id="boxplot">
         <h2>Boxplot dla wybranego genu</h2>
         <div id="boxplot-div"></div>
+
+        {{ box_plot|safe }}
     </div>
 
 </body>
