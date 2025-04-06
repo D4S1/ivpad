@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Wizualizacja aktywności białek</title>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <h1>Wizualizacja różnic w aktywności białek</h1>
     <div id="volcano"></div>
-    <!-- Miejsce na boxplot, który początkowo jest ukryty -->
+
+    {{ vulcano_plot|safe }}
+
     <div id="boxplot" style="display:none;">
         <h2>Boxplot dla wybranego genu</h2>
         <div id="boxplot-div"></div>
