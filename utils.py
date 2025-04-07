@@ -10,12 +10,16 @@ def preprocess_values(excel_file: str) -> pd.DataFrame:
     """
     Preprocess values from an Excel file containing gene expression data.
 
+    This function processes the data from the Excel file, selecting relevant columns that include sample names
+    with 'YD' (young donor) or 'OD' (old donor). It returns a DataFrame containing gene information
+    and expression values for the selected samples.
+
     Parameters:
-    excel_file (str): The path to the Excel file containing the data.
+        excel_file (str): The path to the Excel file containing the data.
 
     Returns:
-    pd.DataFrame: A DataFrame containing the 'EntrezGeneID', 'EntrezGeneSymbol', 'Organism', 
-                  and relevant sample columns that include 'YD' or 'OD' in the sample names.
+        pd.DataFrame: A DataFrame containing 'EntrezGeneID', 'EntrezGeneSymbol', 'Organism',
+                      and relevant sample columns that include 'YD' or 'OD' in the sample names.
     """
     df_box = pd.read_excel(excel_file, sheet_name="S4A values", header=2, index_col=0)
 
@@ -30,11 +34,14 @@ def plot_vulacano(file: str):
     """
     Generate a volcano plot for differential protein expression from a given Excel file.
 
+    This function generates a volcano plot using the 'logFC' and 'adj.P.Val' columns from the Excel file,
+    and returns the HTML div for the plot and the corresponding div ID.
+
     Parameters:
-    file (str): The path to the Excel file containing the data.
+        file (str): The path to the Excel file containing the data.
 
     Returns:
-    tuple: The HTML div of the plot and the div ID.
+        tuple: A tuple containing the HTML div of the plot and the div ID.
     """
     df_volcano = pd.read_excel(file, sheet_name="S4B limma results", header=2, index_col=0)
     df_volcano['neglogP'] = -np.log10(df_volcano['adj.P.Val'])
@@ -77,12 +84,15 @@ def plot_gene(data: pd.DataFrame, gene: str):
     """
     Generate a boxplot comparing protein concentrations between young and old age groups for a given gene.
 
+    This function generates a box plot for a specific gene, comparing protein concentrations in young versus old donors.
+    The plot is based on data from a DataFrame and returned as HTML for embedding in a web page.
+
     Parameters:
-    data (pd.DataFrame): The dataframe containing protein concentration data.
-    gene (str): The gene to plot.
+        data (pd.DataFrame): The DataFrame containing protein concentration data.
+        gene (str): The gene for which the box plot will be created.
 
     Returns:
-    str: The HTML div of the plot.
+        str: The HTML div of the plot for the specified gene.
     """
     data = data[data.EntrezGeneSymbol == gene].T
     data = data.iloc[3:]
@@ -126,13 +136,25 @@ def plot_gene(data: pd.DataFrame, gene: str):
         config={'displayModeBar': False},
     )
 
-def get_publications(gene_id):
 
+def get_publications(gene_id):
+    """
+    Fetch the latest publications related to a given gene.
+
+    This function queries the MyGene API for publications related to a specific gene ID and returns
+    a list of publication details, including PubMed IDs and titles. The publications are formatted as HTML.
+
+    Parameters:
+        gene_id (str): The gene ID for which to retrieve publications.
+
+    Returns:
+        str: The HTML list of publications related to the gene.
+    """
     query = f"https://mygene.info/v3/gene/{gene_id}?species=Human&fields=generif&dotfield=false&size=10"
     response = requests.get(query)
 
-    publications = response.json()["generif"][:10]    
-    
+    publications = response.json()["generif"][:10]
+
     publications_html = ""
 
     for publication in publications:
@@ -143,10 +165,22 @@ def get_publications(gene_id):
         </li>
         '''
         get_pub_title(publication["pubmed"])
+
     return publications_html
 
 
 def get_pub_title(pmid):
+    """
+    Fetch the title of a PubMed publication by its ID.
+
+    This function queries the PubMed API to retrieve the title of a publication based on the provided PubMed ID.
+
+    Parameters:
+        pmid (str): The PubMed ID of the publication.
+
+    Returns:
+        str: The title of the publication, or a default message if not found.
+    """
     url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     params = {
         "db": "pubmed",
