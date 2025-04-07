@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import utils
 
 app = Flask(__name__)
@@ -41,9 +41,11 @@ def show_boxplot(gene):
     Returns:
     str: The HTML div of the box plot for the specified gene.
     """
-    gene_id = df_box[df_box.EntrezGeneSymbol == gene].EntrezGeneID
-    utils.get_publications(gene_id)
-    return utils.plot_gene(df_box, gene)
+    gene_id = int(df_box[df_box.EntrezGeneSymbol == gene].EntrezGeneID)
+    return jsonify({
+        "boxplot_html": utils.plot_gene(df_box, gene),
+        "publication_html": utils.get_publications(gene_id)
+    })
 
 
 if __name__ == "__main__":

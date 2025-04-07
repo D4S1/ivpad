@@ -3,6 +3,7 @@ import numpy as np
 import plotly.express as px
 from plotly.offline import plot
 import re
+import requests
 
 
 def preprocess_values(excel_file: str) -> pd.DataFrame:
@@ -124,3 +125,38 @@ def plot_gene(data: pd.DataFrame, gene: str):
         include_plotlyjs=False,
         config={'displayModeBar': False},
     )
+
+def get_publications(gene_id):
+
+    query = f"https://mygene.info/v3/gene/{gene_id}?species=Human&fields=generif&dotfield=false&size=10"
+    response = requests.get(query)
+
+    publications = response.json()["generif"][:10]    
+    
+    publications_html = ""
+
+    for publication in publications:
+        publications_html += f'''
+        <li class="list-group-item">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/{publication["pubmed"]}/">{get_pub_title(publication["pubmed"])}</a><br>
+        <small class="text-muted">Pubmed ID: {publication["pubmed"]}</small>
+        </li>
+        '''
+        get_pub_title(publication["pubmed"])
+    return publications_html
+
+
+def get_pub_title(pmid):
+    url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+    params = {
+        "db": "pubmed",
+        "id": pmid,
+        "retmode": "json"
+    }
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    try:
+        return data['result'][str(pmid)]["title"]
+    except KeyError:
+        return "Title not found"
