@@ -2,6 +2,9 @@ from flask import Flask, render_template, jsonify
 import utils
 
 app = Flask(__name__)
+app.config['ENV'] = 'production'
+app.config['DEBUG'] = False
+app.config['TESTING'] = False
 
 excel_file = "data/NIHMS1635539-supplement-1635539_Sup_tab_4.xlsx"
 df_box = utils.preprocess_values(excel_file)
@@ -49,4 +52,4 @@ def show_boxplot(gene):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
