@@ -41,7 +41,8 @@ def show_boxplot(gene):
     Returns:
     str: The HTML div of the box plot for the specified gene.
     """
-    # f"https://mygene.info/v3/gene/{gene_id}?species=Human&fields=generif&dotfield=false&size=10"
+    gene_id = df_box[df_box.EntrezGeneSymbol == gene].EntrezGeneID
+    utils.get_publications(gene_id)
     return utils.plot_gene(df_box, gene)
 
 
