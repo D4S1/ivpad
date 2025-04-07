@@ -27,7 +27,7 @@ Follow these steps to get the app up and running in a conda environment:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/ivpad.git
+git clone https://github.com/D4S1/ivpad.git
 cd ivpad
 ```
 
