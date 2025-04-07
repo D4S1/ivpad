@@ -34,7 +34,7 @@ cd ivpad
 ### 2. Create and activate the Conda environment
 
 ```bash
-conda create -n ivpad python pandas numpy plotly flask requests
+conda create -n ivpad python pandas numpy flask requests plotly openpyxl
 conda activate ivpad
 ```
 
@@ -47,12 +47,13 @@ name: ivpad
 channels:
   - defaults
 dependencies:
-  - python=3.10
+  - python
   - pandas
   - numpy
   - flask
   - requests
   - plotly
+  - openpyxl
 ```
 
 Save this as `environment.yml` and run:
