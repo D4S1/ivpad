@@ -8,6 +8,9 @@ The system also enhances the user experience by providing links to scientific pa
 
 This service is intended to assist bioinformaticians, molecular biologists, and other researchers in identifying and understanding key proteins involved in aging, with a clear, data-driven interface to explore the relationships between gene expression and age-related changes in protein activity.
 
+![Default view](figs/ivpad_1.png)
+![Expanded view](figs/ivpad_2.png)
+
 ---
 
 ## 📦 Features
