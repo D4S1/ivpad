@@ -38,7 +38,7 @@ conda create -n ivpad python pandas numpy flask requests plotly openpyxl
 conda activate ivpad
 ```
 
-### ✅ Optional: Use an `environment.yml` file instead
+#### Alternatively Use an `environment.yml` file instead
 
 If you'd prefer to set everything up from a config file, you can use this:
 
